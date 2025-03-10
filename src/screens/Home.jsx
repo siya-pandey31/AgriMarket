@@ -1,146 +1,116 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, StatusBar, Animated } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import { Image } from 'react-native';
+import React from "react";
+import { 
+  View, Text, TouchableOpacity, StyleSheet, ImageBackground 
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const Home = ({ navigation }) => {
+const Home = () => {
+  const navigation = useNavigation();
+
   return (
-    <ImageBackground source={require('../assets/HomeBG.png')} style={styles.background}>
-      <StatusBar barStyle="light-content" backgroundColor="#2e7d32" />
-
-      <View style={styles.navbar}>
-        <Image source={require('../assets/FarmerLogo.png')} style={styles.logo} />
-        <View style={styles.navButtons}>
-          <TouchableOpacity onPress={() => navigation.navigate("Market")} style={styles.navButton}>
-            <Text style={styles.navText}>Market</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Profile")} style={styles.navButton}>
-            <Text style={styles.navText}>Profile</Text>
+    <ImageBackground 
+      source={require("../assets/HomeBG.png")} // Change this to your background image
+      style={styles.background}
+    >
+      <View style={styles.overlay}>
+        {/* Header Section */}
+        <View style={styles.header}>
+          <Text style={styles.logo}>AgriMarket</Text>
+          <TouchableOpacity 
+            style={styles.signupButton} 
+            onPress={() => navigation.navigate("Signup")}
+          >
+            <Text style={styles.signupText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-      </View>
 
-      <View style={styles.overlay}>
-        <Text style={styles.title}>Welcome to AgriMarket</Text>
-        <Text style={styles.subtitle}>Connecting Farmers & Buyers Directly</Text>
+        {/* Welcome Message */}
+        <Text style={styles.welcomeText}>Welcome to AgriMarket</Text>
+        <Text style={styles.subText}>Connecting Farmers & Buyers Directly</Text>
 
-        <AnimatedTouchable onPress={() => navigation.navigate("Market")} colors={['#4CAF50', '#2E7D32']} text="Browse Markets" />
-        <AnimatedTouchable onPress={() => navigation.navigate("PostProduce")} colors={['#FF9800', '#E65100']} text="Post Your Product" />
-        <AnimatedTouchable onPress={() => navigation.navigate("Orders")} colors={['#2196F3', '#0D47A1']} text="View Your Orders" />
+        {/* Buttons Section */}
+        <TouchableOpacity style={[styles.button, { backgroundColor: "#4CAF50" }]} onPress={() => navigation.navigate("Market")}>
+          <Text style={styles.buttonText}>Browse Markets</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.button, { backgroundColor: "#FF9800" }]} onPress={() => navigation.navigate("Post")}>
+          <Text style={styles.buttonText}>Post Your Product</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.button, { backgroundColor: "#2196F3" }]} onPress={() => navigation.navigate("Orders")}>
+          <Text style={styles.buttonText}>View Your Orders</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.button, { backgroundColor: "#9C27B0" }]} onPress={() => navigation.navigate("ESP32")}>
+          <Text style={styles.buttonText}>Connect to ESP32-CAM</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
 };
 
-const AnimatedTouchable = ({ onPress, colors, text }) => {
-  const scaleValue = new Animated.Value(1);
-
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.95,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      friction: 3,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  return (
-    <Animated.View style={{ transform: [{ scale: scaleValue }], width: '85%' }}>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onPress={onPress}
-        style={styles.button}
-      >
-        <LinearGradient colors={colors} style={styles.gradient}>
-          <Text style={styles.buttonText}>{text}</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-};
-
-export default Home;
-
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Dark overlay for readability
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // Adds a semi-transparent overlay
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
   },
-  navbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    backgroundColor: '#2e7d32',
-    elevation: 5,
+  header: {
+    position: "absolute",
+    top: 40,
+    left: 20,
+    right: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   logo: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
   },
-  navButtons: {
-    flexDirection: 'row',
-  },
-  navButton: {
-    backgroundColor: 'white',
+  signupButton: {
+    backgroundColor: "#FF5722",
     paddingVertical: 8,
     paddingHorizontal: 15,
-    borderRadius: 8,
-    marginLeft: 10,
-    elevation: 3,
+    borderRadius: 5,
   },
-  navText: {
-    color: '#2e7d32',
-    fontWeight: 'bold',
+  signupText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  welcomeText: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  subText: {
     fontSize: 16,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: 'white',
+    color: "#fff",
     marginBottom: 30,
-    textAlign: 'center',
-    fontWeight: '500',
+    textAlign: "center",
   },
   button: {
-    width: '100%',
-    marginVertical: 10,
-    borderRadius: 10,
-    overflow: 'hidden',
-    elevation: 5,
-  },
-  gradient: {
+    width: "90%",
     paddingVertical: 15,
-    alignItems: 'center',
     borderRadius: 10,
+    alignItems: "center",
+    marginVertical: 10,
+    elevation: 5, // Adds a shadow effect
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "#fff",
   },
 });
+
+export default Home;
